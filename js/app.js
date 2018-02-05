@@ -75,7 +75,7 @@ class Ui {
 
 // event listeners
 document.getElementById('newMsgBtn').addEventListener('click', function(event){
-    const userId = document.getElementById('userId').innerText,
+    const userId = document.getElementById('userId').value,
         message = document.getElementById('newMsg').value;
         const now = new Date()
 
