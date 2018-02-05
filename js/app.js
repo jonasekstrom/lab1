@@ -57,12 +57,12 @@ class Message {
     }
 }
 class Ui {
-    addMessageToList(bird){
+    addMessageToList(chatObject){
    
         
         const db = firebase.database();
         console.log('Adding to database...');
-        db.ref('/').push(bird);
+        db.ref('/').push(chatObject);
         console.log('Finished adding to database.');
  
 
