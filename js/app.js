@@ -18,16 +18,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
         console.log(data);
         
         const list = document.getElementById('msg-list');
-        for( let bird in data ) {
-            let r = data[bird];
-            //console.log(`Användare ${r.userId} egenskaper är: `, data[bird]);
+        for( let msg in data ) {
+            let r = data[msg];
+            //console.log(`Användare ${r.userId} egenskaper är: `, data[msg]);
             const row = document.createElement('div');
             let str = JSON.stringify(r);
             
             row.innerHTML = `
+            <li class="list-group-item">
             <div class="card text-white bg-dark mb-3">
                     <div class="card-header">${r.userId} ${r.timeStamp}</div>
-                    <div class="card-body">
+                    <div class="card-body bg-light text-dark">
                       
                       <p class="card-text">${r.message}</p>
                     </div>
@@ -38,15 +39,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
                       </button>
                     </div>
                   </div>
+                </li>
     
     `;
-    
-    list.appendChild(row);
+
+    list.insertBefore(row, list.childNodes[0]);
+    //list.appendChild(row);
     
         }
         })
   });
-class Bird {
+class Message {
     constructor(userId, message, timeStamp){
         this.userId = userId;
         this.message = message;
@@ -54,7 +57,7 @@ class Bird {
     }
 }
 class Ui {
-    addBirdToList(bird){
+    addMessageToList(bird){
    
         
         const db = firebase.database();
@@ -64,31 +67,6 @@ class Ui {
  
 
     }
-/*
-    showAlert(message, className){
-        // create div
-    const div = document.createElement('div');
-    // add classes
-    div.className = `alert ${className}`;
-    // add text
-    div.appendChild(document.createTextNode(message));
-    // get parent
-    const container = document.querySelector('.container');
-    const form = document.querySelector('#bird-form');
-    // insert alert
-    container.insertBefore(div, form);
-    // timeout after 3s
-    setTimeout(function(){
-        document.querySelector('.alert').remove();
-    }, 3000);
-    }
-*/
-   // deleteBird(target){
-   //     if(target.className === 'delete'){
-   //         target.parentElement.parentElement.remove();
-            
-   //     }
-   // }
 
     clearFields(){
        
@@ -101,7 +79,7 @@ document.getElementById('newMsgBtn').addEventListener('click', function(event){
         message = document.getElementById('newMsg').value;
         const now = new Date()
 
-        // Print local and UTC timezones
+        // Print local and timezones
         hour = now.getHours();
         
        minute = ('0'+now.getMinutes()).slice(-2);
@@ -109,43 +87,14 @@ document.getElementById('newMsgBtn').addEventListener('click', function(event){
         
        timeStamp = `${hour}:${minute}:${seconds}`;
         
-    // instantiate bird
-    let bird = new Bird(userId, message, timeStamp);
-    //console.log(bird);
+    // instantiate Message
+    let chatObject = new Message(userId, message, timeStamp);
+    //console.log(chatObject);
     // instantiate ui
     const ui = new Ui();
     
-    ui.addBirdToList(bird);
-    //validate
-    /*if(userId === '' || message === ''){
-        // error alert
-       console.log('Var vänlig och fyll i alla fält', 'error')
-    } else {
-        // add bird to list
-        ui.addBirdToList(bird);
-        
-        // show success
-       console.log('Meddelande Tillagt', 'success');
-        // clear fields
-        ui.clearFields();
-    }*/
-    window.location.href = "#refresh";
+    ui.addMessageToList(chatObject);
+  
+    //window.location.href = "#refresh";
     event.preventDefault();
 });
-/*
-// event listener for delete
-document.getElementById('bird-list').addEventListener('click', function(event){
-   
-    // instantiate ui
-    const ui = new Ui();
-    
-    // delete bird
-    ui.deleteBird(event.target);
-
-    // show message 
-    ui.showAlert('Fågel Borttagen', 'success');
-
-
-    event.preventDefault();
-})
-*/
