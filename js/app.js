@@ -97,6 +97,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const db = firebase.database();
     db.ref('/').once('value', function(snapshot) {
         console.log('On value: hämtar hela db.');
+        var myNode = document.getElementById("msg-list");
+        while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+        }
        
 
   
