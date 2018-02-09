@@ -71,40 +71,16 @@ dbUpdate.ref('/').on("child_added", function(snapshot, prevChildKey) {
             divFooter.className = "card-footer";
             const btnS = document.createElement('button');
             btnS.className = "btn bg-success";
-            btnS.id = `like${n.timeStamp}`;
-            btnS.title = "I like it!";
-            btnS.addEventListener("click", function(e){
-                if(currentUser === ""){
-                    document.getElementById('broken').innerText = "You must be logged in to Like/Dislike";
-                  }else if(n.lovers.includes(currentUser)){
-                    document.getElementById('broken').innerText = `${currentUser} already liked this message`;
-                  } else {
-                    document.getElementById('broken').innerText = 'This function is broken';
-                            
-                      
-                  }
-            });
+            
             const iconUp = document.createElement('i');
             iconUp.className = "fa fa-thumbs-o-up mr-auto";
             const btnD = document.createElement('button');
             btnD.className = "btn bg-danger";
-            btnD.id = `dislike${n.timeStamp}`;
-            btnD.title = "meeh...nothing special!";
-            btnD.addEventListener("click", function(e){
-                if(currentUser === ""){
-                    document.getElementById('broken').innerText = "You must be logged in to Like/Dislike";
-                  }else if(n.haters.includes(currentUser)){
-                    document.getElementById('broken').innerText = `${currentUser} already hated this message!!`;
-                  } else {
-                    document.getElementById('broken').innerText = 'This function is broken';
-                      
-                  }
-            });
+            
 
             const iconDown = document.createElement('i');
             iconDown.className = "fa fa-thumbs-o-down mr-auto";
-            span.id="broken";
-            span.className = "ml-5";
+            
             
             divCard.appendChild(divHead);
             divBody.appendChild(pText);
@@ -158,42 +134,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
             divFooter.className = "card-footer";
             const btnS = document.createElement('button');
             btnS.className = "btn bg-success";
-            btnS.id = `like${r.timeStamp}`;
-            btnS.title = "I like it!";
-            btnS.addEventListener("click", function(e){
-                if(userName === ""){
-                    document.getElementById('broken').innerText = "You must be logged in to Like/Dislike";
-                  }else if(r.lovers.includes(userName)){
-                    document.getElementById('broken').innerText = `${userName} already liked this message`;
-                  } else {
-                    document.getElementById('broken').innerText = 'This function is broken';
-                            
-                      
-                  }
-            });
+            
             const iconUp = document.createElement('i');
             iconUp.className = "fa fa-thumbs-o-up mr-auto";
 
             const btnD = document.createElement('button');
             btnD.className = "btn bg-danger";
-            btnD.id = `dislike${r.timeStamp}`;
-            btnD.title = "meeh...nothing special!"
-            btnD.addEventListener("click", function(e){
-                if(userName === ""){
-                    document.getElementById('broken').innerText = "You must be logged in to Like/Dislike";
-                  }else if(r.haters.includes(userName)){
-                    document.getElementById('broken').innerText = `${userName} already hated this message!!`;
-                  } else {
-                    document.getElementById('broken').innerText = 'This function is broken';
-                      
-                  }
-            });
+            
             const iconDown = document.createElement('i');
             iconDown.className = "fa fa-thumbs-o-down mr-auto";
-            const span = document.createElement('span');
-            span.id="broken";
-            span.className = "ml-5";
-
+            
             divCard.appendChild(divHead);
             divBody.appendChild(pText);
             divCard.appendChild(divBody);
@@ -201,7 +151,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
             btnD.appendChild(iconDown);
             divFooter.appendChild(btnS);
             divFooter.appendChild(btnD);
-            divFooter.appendChild(span);
             divCard.appendChild(divFooter);
 
             
