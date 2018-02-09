@@ -18,14 +18,15 @@ function login(){
     if(login === ""){
         document.getElementById('welcome').innerText = "Cant be empty... ";
       } else {
-        localStorage.setItem('userId', JSON.stringify(login));  
+        localStorage.setItem('userId', JSON.stringify(login));
         document.getElementById('welcome').innerText = "Welcome  ";
         document.getElementById('userId').disabled = true;
         document.getElementById('saveUser').disabled = true;
-        
+
       }
       location.reload();
 }
+
 let deleteUser = document.getElementById('removeUser').addEventListener('click', logout);
 // Remove from LS
 function logout() {
@@ -38,25 +39,24 @@ function logout() {
         document.getElementById('removeUser').disabled = true;
     }
     location.reload();
-    
+
   }
 const dbUpdate = firebase.database();
 // Retrieve new posts as they are added to our database
 dbUpdate.ref('/').on("child_added", function(snapshot, prevChildKey) {
     var newPost = snapshot.val();
-    console.log("Author: " + newPost.userId);
-    console.log("Title: " + newPost.message);
-    console.log("Previous Post ID: " + prevChildKey);
+    var key = snapshot.key;
+    console.log("detta är " , key);
     const updateList = document.getElementById('msg-list');
-       
-        
+
+
             console.log('ny post i db');
             let n = newPost;
-            //console.log(`Användare ${r.userId} egenskaper är: `, data[msg]);
+            let currentUser = document.getElementById('userId').value;
+            
             const row = document.createElement('li');
             row.classList = "list-group-item";
-            //let str = JSON.stringify(r);
-            //console.log(r)
+            
             const divCard = document.createElement('div');
             divCard.className = "card text-white bg-dark mb-3";
             const divHead = document.createElement('div');
@@ -71,12 +71,40 @@ dbUpdate.ref('/').on("child_added", function(snapshot, prevChildKey) {
             divFooter.className = "card-footer";
             const btnS = document.createElement('button');
             btnS.className = "btn bg-success";
+            btnS.id = `like${n.timeStamp}`;
+            btnS.title = "I like it!";
+            btnS.addEventListener("click", function(e){
+                if(currentUser === ""){
+                    document.getElementById('broken').innerText = "You must be logged in to Like/Dislike";
+                  }else if(n.lovers.includes(currentUser)){
+                    document.getElementById('broken').innerText = `${currentUser} already liked this message`;
+                  } else {
+                    document.getElementById('broken').innerText = 'This function is broken';
+                            
+                      
+                  }
+            });
             const iconUp = document.createElement('i');
             iconUp.className = "fa fa-thumbs-o-up mr-auto";
             const btnD = document.createElement('button');
             btnD.className = "btn bg-danger";
+            btnD.id = `dislike${n.timeStamp}`;
+            btnD.title = "meeh...nothing special!";
+            btnD.addEventListener("click", function(e){
+                if(currentUser === ""){
+                    document.getElementById('broken').innerText = "You must be logged in to Like/Dislike";
+                  }else if(n.haters.includes(currentUser)){
+                    document.getElementById('broken').innerText = `${currentUser} already hated this message!!`;
+                  } else {
+                    document.getElementById('broken').innerText = 'This function is broken';
+                      
+                  }
+            });
+
             const iconDown = document.createElement('i');
             iconDown.className = "fa fa-thumbs-o-down mr-auto";
+            span.id="broken";
+            span.className = "ml-5";
             
             divCard.appendChild(divHead);
             divBody.appendChild(pText);
@@ -89,7 +117,7 @@ dbUpdate.ref('/').on("child_added", function(snapshot, prevChildKey) {
 
 
             row.appendChild(divCard);
-            
+
     updateList.insertBefore(row, updateList.firstChild);
   });
 
@@ -101,22 +129,21 @@ document.addEventListener("DOMContentLoaded", function(event) {
         while (myNode.firstChild) {
         myNode.removeChild(myNode.firstChild);
         }
-       
 
-  
-       let data = snapshot.val();
-       let key = snapshot.key;
-    
+
+
+        const data = snapshot.val();
+        const key = snapshot.key;
+        console.log(key);
         const list = document.getElementById('msg-list');
-       
+        let userName = document.getElementById('userId').value;
+    
         for( let msg in data ) {
-            console.log(data[msg]);
+           
             let r = data[msg];
-            //console.log(`Användare ${r.userId} egenskaper är: `, data[msg]);
             const row = document.createElement('li');
             row.classList = "list-group-item";
-            //let str = JSON.stringify(r);
-            //console.log(r)
+            
             const divCard = document.createElement('div');
             divCard.className = "card text-white bg-dark mb-3";
             const divHead = document.createElement('div');
@@ -131,13 +158,42 @@ document.addEventListener("DOMContentLoaded", function(event) {
             divFooter.className = "card-footer";
             const btnS = document.createElement('button');
             btnS.className = "btn bg-success";
+            btnS.id = `like${r.timeStamp}`;
+            btnS.title = "I like it!";
+            btnS.addEventListener("click", function(e){
+                if(userName === ""){
+                    document.getElementById('broken').innerText = "You must be logged in to Like/Dislike";
+                  }else if(r.lovers.includes(userName)){
+                    document.getElementById('broken').innerText = `${userName} already liked this message`;
+                  } else {
+                    document.getElementById('broken').innerText = 'This function is broken';
+                            
+                      
+                  }
+            });
             const iconUp = document.createElement('i');
             iconUp.className = "fa fa-thumbs-o-up mr-auto";
+
             const btnD = document.createElement('button');
             btnD.className = "btn bg-danger";
+            btnD.id = `dislike${r.timeStamp}`;
+            btnD.title = "meeh...nothing special!"
+            btnD.addEventListener("click", function(e){
+                if(userName === ""){
+                    document.getElementById('broken').innerText = "You must be logged in to Like/Dislike";
+                  }else if(r.haters.includes(userName)){
+                    document.getElementById('broken').innerText = `${userName} already hated this message!!`;
+                  } else {
+                    document.getElementById('broken').innerText = 'This function is broken';
+                      
+                  }
+            });
             const iconDown = document.createElement('i');
             iconDown.className = "fa fa-thumbs-o-down mr-auto";
-            
+            const span = document.createElement('span');
+            span.id="broken";
+            span.className = "ml-5";
+
             divCard.appendChild(divHead);
             divBody.appendChild(pText);
             divCard.appendChild(divBody);
@@ -145,22 +201,31 @@ document.addEventListener("DOMContentLoaded", function(event) {
             btnD.appendChild(iconDown);
             divFooter.appendChild(btnS);
             divFooter.appendChild(btnD);
+            divFooter.appendChild(span);
             divCard.appendChild(divFooter);
 
+            
 
             row.appendChild(divCard);
-            
+
     list.insertBefore(row, list.firstChild);
-    //console.log(key);
-    //console.log(list);
-    //list.appendChild(row);
-    
         }
         })
         getTasks();
-        
+
   });
-  
+  function updateLike(){
+    const db = firebase.database();
+   
+    console.log('Updating database...');
+    
+    console.log('Finished updating database.');
+  }
+
+  function updateDislike(){
+    console.log('Update to database....')
+  }
+
   function getTasks() {
     let userId;
     if(localStorage.getItem('userId') === null){
@@ -173,31 +238,35 @@ document.addEventListener("DOMContentLoaded", function(event) {
       document.getElementById('saveUser').className = "btn btn-success ml-5 disabled";
       document.getElementById('saveUser').disabled = true;
       document.getElementById('userId').disabled = true;
-      
+
     }
 }
 
 class Message {
-    constructor(userId, message, timeStamp){
-        this.userId = userId;
-        this.message = message;
-        this.timeStamp = timeStamp;
-    }
+   constructor(userId, message, timeStamp,likeCount,lovers,dislikeCount,haters){
+       this.userId = userId;
+       this.message = message;
+       this.timeStamp = timeStamp;
+       this.likeCount = likeCount;
+       this.lovers = lovers;
+       this.dislikeCount = dislikeCount;
+       this.haters = haters;
+   }
 }
 class Ui {
     addMessageToList(chatObject){
-   
-        
+
+
         const db = firebase.database();
         console.log('Adding to database...');
         db.ref('/').push(chatObject);
         console.log('Finished adding to database.');
- 
+
 
     }
 
     clearFields(){
-       
+
     }
 };
 
@@ -209,23 +278,44 @@ document.getElementById('newMsgBtn').addEventListener('click', function(event){
 
         // Print local and timezones
         hour = now.getHours();
-        
+
        minute = ('0'+now.getMinutes()).slice(-2);
         seconds = ('0'+now.getSeconds()).slice(-2);
-        
-       timeStamp = `${hour}:${minute}:${seconds}`;
-        
-    // instantiate Message
-    let chatObject = new Message(userId, message, timeStamp);
-    //console.log(chatObject);
-    // instantiate ui
-    const ui = new Ui();
-    
-    ui.addMessageToList(chatObject);
-   // location.reload();
 
-   document.getElementById('newMsg').value = "";
-  
-    //window.location.href = "#refresh";
+       timeStamp = `${hour}:${minute}:${seconds}`;
+       let like = 0,
+                 lovers = [""],
+                 dislike = 0,
+                 haters = [""];
+
+                 if(userId === "" || message === ""){
+                     document.getElementById('warning').innerText = "Please fill in all fields";
+                 } else {
+          // instantiate Message
+          let chatObject = new Message(userId, message, timeStamp, like, lovers, dislike,haters);
+          //console.log(chatObject);
+          // instantiate ui
+          const ui = new Ui();
+
+          ui.addMessageToList(chatObject);
+         // location.reload();
+
+         document.getElementById('newMsg').value = "";
+       }
+
     event.preventDefault();
+});
+
+// Get the input field
+var input = document.getElementById("newMsg");
+
+// Execute a function when the user releases a key on the keyboard
+input.addEventListener("keyup", function(event) {
+  // Cancel the default action, if needed
+  event.preventDefault();
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Trigger the button element with a click
+    document.getElementById("newMsgBtn").click();
+  }
 });
